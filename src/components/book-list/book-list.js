@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-/*import { bindActionCreators } from 'redux';*/
+import { bindActionCreators } from 'redux';
 
 import './book-list.css';
 
@@ -58,7 +58,7 @@ const BookList = ({books, onAddedToCart}) => {
 	);
 }
 
-const mapStateToProps = ({books, loading, error}) => {
+const mapStateToProps = ({bookList: {books, loading, error}}) => {
 	return { books, loading, error }
 }
 
@@ -103,10 +103,11 @@ const mapStateToProps = ({books, loading, error}) => {
 
 const mapDispatchToProps = (dispatch, {bookstoreService}) => {
 	// Деструктурируем bookstoreService из ownProps
-	return {
-		fetchBooks: fetchBooks(dispatch, bookstoreService), // создали в action-creators функцию, импортировали её и вызвали
-		onAddedToCart: (bookId) => dispatch(bookAddedToCart(bookId))
-	}
+	return bindActionCreators({
+		//fetchBooks: fetchBooks(dispatch, bookstoreService), // создали в action-creators функцию, импортировали её и вызвали
+		fetchBooks: fetchBooks(bookstoreService),
+		onAddedToCart: bookAddedToCart
+	}, dispatch)
 }
 
 export default compose(
